@@ -7,9 +7,11 @@ import com.example.ProjectLicence.repository.VehicleRepository;
 import com.example.ProjectLicence.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import static com.example.ProjectLicence.util.RegexUtil.validatePlate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,22 @@ public class VehicleServiceImpl implements VehicleService {
         return new VehicleReq.VehicleDto(vehicle);
     }
 
+    @Override
+    public List<VehicleReq.VehicleDto> getAllVehicles(){
+        List<VehicleReq.VehicleDto> vehicleResponseList = new ArrayList<>();
 
+        List<Vehicle> vehicleList = vehicleRepository.findAll();
+
+        if(CollectionUtils.isEmpty(vehicleList)){
+            throw new VehicleServiceException("Vehicle not found!");
+        }
+
+        for (Vehicle vehicle : vehicleList){
+            vehicleResponseList.add(new VehicleReq.VehicleDto(vehicle));
+        }
+
+        return vehicleResponseList;
+    }
 
     private String formatPlate(String plate){
         return plate.strip().toUpperCase();

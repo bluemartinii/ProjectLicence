@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,11 +30,14 @@ public class VehicleServiceImpl implements VehicleService {
 
          */
 
-        Vehicle vehicle = vehicleRepository.findByPlate(vehicleRequest.getPlate());
+        Vehicle vehicle = vehicleRepository.findByPlate(formatPlate(vehicleRequest.getPlate()));
 
         if(ObjectUtils.isEmpty(vehicle)) {
             throw new VehicleServiceException("Vehicle is not found!");
         }
+
+        vehicle.setPassDate(new Date());
+        vehicleRepository.save(vehicle);
 
         return new VehicleReq.VehicleDto(vehicle);
     }
@@ -41,18 +45,30 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<VehicleReq.VehicleDto> getAllVehicles(){
         List<VehicleReq.VehicleDto> vehicleResponseList = new ArrayList<>();
-
         List<Vehicle> vehicleList = vehicleRepository.findAll();
 
         if(CollectionUtils.isEmpty(vehicleList)){
             throw new VehicleServiceException("Vehicle not found!");
         }
 
-        for (Vehicle vehicle : vehicleList){
+        for(Vehicle vehicle : vehicleList){
             vehicleResponseList.add(new VehicleReq.VehicleDto(vehicle));
         }
 
         return vehicleResponseList;
+    }
+
+    @Override
+    public VehicleReq.VehicleDto getLastVehicle(){
+        Vehicle vehicle;
+
+        vehicle = vehicleRepository.findFirstByOrderByPassDateDesc();
+
+        if(ObjectUtils.isEmpty(vehicle)){
+            throw new VehicleServiceException("Vehicle not found!");
+        }
+
+        return new VehicleReq.VehicleDto(vehicle);
     }
 
     private String formatPlate(String plate){

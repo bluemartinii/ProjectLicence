@@ -8,4 +8,6 @@ public interface VehicleService {
     VehicleReq.VehicleDto getVehicle(VehicleReq.VehicleRequest vehicleRequest);
 
     List<VehicleReq.VehicleDto> getAllVehicles();
+
+    VehicleReq.VehicleDto getLastVehicle();
 }

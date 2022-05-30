@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 public class Vehicle {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     private String plate;
@@ -33,4 +33,6 @@ public class Vehicle {
     private String productionYear;
 
     private String vehicleType;
+
+    private Date passDate;
 }

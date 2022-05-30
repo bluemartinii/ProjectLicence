@@ -30,6 +30,8 @@ public interface VehicleReq {
 
         private String vehicleType;
 
+        private Date passDate;
+
         public VehicleDto(Vehicle vehicle) {
             this.plate = vehicle.getPlate();
             this.maintenanceDate = vehicle.getMaintenanceDate();
@@ -43,6 +45,7 @@ public interface VehicleReq {
             this.model = vehicle.getModel();
             this.productionYear = vehicle.getProductionYear();
             this.vehicleType = vehicle.getVehicleType();
+            this.passDate = vehicle.getPassDate();
         }
     }
 

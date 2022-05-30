@@ -24,8 +24,15 @@ public class VehicleController {
         return new ResponseEntity<>(vehicleService.getVehicle(vehicleRequest), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping(name = "get-all-vehicle", path = "/vehicle/list")
     public ResponseEntity<List<VehicleDto>> getAllVehicles(){
         return new ResponseEntity<>(vehicleService.getAllVehicles(), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(name = "get-last-vehicle", path = "/vehicle/one")
+    public ResponseEntity<VehicleDto> getLastVehicle(){
+        return new ResponseEntity<>(vehicleService.getLastVehicle(), HttpStatus.OK);
     }
 }

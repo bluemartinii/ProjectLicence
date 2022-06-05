@@ -1,18 +1,17 @@
 package com.example.ProjectLicence.model.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import java.util.List;
 
 @Entity
 @Data
 public class Penalty {
-    String name;
+    private String name;
     @Id
-    Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
     @ManyToMany(mappedBy = "penalties")
     List<Vehicle> vehicles;
 }

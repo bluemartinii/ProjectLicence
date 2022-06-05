@@ -1,8 +1,11 @@
 package com.example.ProjectLicence.service.impl;
 
+import com.example.ProjectLicence.dto.PenaltyRequest;
 import com.example.ProjectLicence.exception.VehicleServiceException;
 import com.example.ProjectLicence.model.VehicleReq;
+import com.example.ProjectLicence.model.entity.Penalty;
 import com.example.ProjectLicence.model.entity.Vehicle;
+import com.example.ProjectLicence.repository.PenaltyRepository;
 import com.example.ProjectLicence.repository.VehicleRepository;
 import com.example.ProjectLicence.service.VehicleService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import java.util.List;
 public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final PenaltyRepository penaltyRepository;
 
     @Override
     public VehicleReq.VehicleDto getVehicle(VehicleReq.VehicleRequest vehicleRequest) {
@@ -37,9 +41,25 @@ public class VehicleServiceImpl implements VehicleService {
         }
 
         vehicle.setPassDate(new Date());
-        vehicleRepository.save(vehicle);
 
+        vehicleRepository.save(vehicle);
         return new VehicleReq.VehicleDto(vehicle);
+    }
+
+    @Override
+    public VehicleReq.VehicleDto updateVehicleFine(PenaltyRequest penaltyRequest) {
+        Vehicle vehicle = vehicleRepository.findByPlate(penaltyRequest.getPlate());
+        List<Penalty> penalties = penaltyRepository.findByIds(penaltyRequest.getIds());
+        vehicle.setPenalties(penalties);
+        vehicle.setPenaltyDate(new Date());
+        vehicle.setPenaltyAmount(penaltyRequest.getPenaltyAmount());
+        vehicleRepository.save(vehicle);
+        return new VehicleReq.VehicleDto(vehicle);
+    }
+
+    @Override
+    public List<Penalty> trafficPenalty() {
+        return penaltyRepository.findAll();
     }
 
     @Override
@@ -57,6 +77,7 @@ public class VehicleServiceImpl implements VehicleService {
 
         return vehicleResponseList;
     }
+
 
     @Override
     public VehicleReq.VehicleDto getLastVehicle(){
